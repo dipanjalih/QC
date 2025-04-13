@@ -30,8 +30,6 @@ logging.basicConfig(filename="lih_3_adapt_gsd.log", level=logging.INFO)
 logger=logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-
-
 driver = PySCFDriver(
     atom='Li .0 .0 .0; H .0 .0 3.0',
     unit=DistanceUnit.ANGSTROM,
@@ -50,10 +48,8 @@ Enuc= shift
 print("Nuclear Reulsion Energy:", Enuc)
 
 
-
 # FCI calculations
 solver = GroundStateEigensolver(mapper,NumPyMinimumEigensolver(),)
-
 result = solver.solve(problem)
 exact_energy = result.eigenvalues[0]
 print("===============")
@@ -61,21 +57,19 @@ print("Exact Energy with nuclear repulsion and shift: ", exact_energy + Enuc)
 print("===============")
 
 
-
-initial_state=HartreeFock(problem.num_spatial_orbitals,problem.num_particles,mapper,)
-
-
 optimizer = L_BFGS_B(maxiter=500000)
 estimator = Estimator()
 
 # Print the Hartree Fock energy
+initial_state=HartreeFock(problem.num_spatial_orbitals,problem.num_particles,mapper,)
 hf_energy = estimator.run(initial_state , qubit_jw_op).result().values
+print("===============")
 print("Hartree Fock Energy:", hf_energy + Enuc)
+print("===============")
 
 
+# Choosing the operator pool. In this case it is generalized singled and doubles (GSD).
 ansatz = UCC(num_spatial_orbitals=problem.num_spatial_orbitals, num_particles=problem.num_particles, excitations='sd', generalized=True, qubit_mapper=mapper, initial_state= initial_state)
-
-
 excitation_list = ansatz._get_excitation_list()
 print('Number of operators in the pool:',len(excitation_list))
 
@@ -99,6 +93,3 @@ print("Final list", final_list)
 print("Adapt energy:", np.real(result.eigenvalue)+Enuc, ' ', "Adapt parameters:", final_circuit.num_parameters)
 print(result.eigenvalue_history)
 print(result.optimal_parameters)
-
-
-
