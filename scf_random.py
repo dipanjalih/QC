@@ -4,21 +4,12 @@ from pyscf import gto, scf
 from scipy.linalg import fractional_matrix_power
 
 
-#Step1:Specify the molecule.
+#Step1:Specify the molecule and the bond-distance.
 
 dist=3.0
 mol=gto.M(unit='Angstrom',atom='''Li 0 0 0; H 0 0 '''+str(dist),basis='sto-3g' )
 
-'''
-mol=pyscf.gto.M(
-atom=
-"""
-O          .000000     .000000     .000000
-H          .000000     .000000     .957200
-H          .926627     .000000    -.239987
-""",
-basis = 'sto3g',)
-'''
+
 spatial_orbitals= mol.nao_nr();ne=mol.nelectron;occ=int(ne/2);virt=spatial_orbitals-occ
 spin_orbitals=2*spatial_orbitals
 enuc=mol.energy_nuc()
