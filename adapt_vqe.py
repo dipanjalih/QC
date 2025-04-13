@@ -47,7 +47,7 @@ mapper = JordanWignerMapper()
 fermionic_op = problem.hamiltonian.second_q_op()
 qubit_jw_op = mapper.map(fermionic_op)
 Enuc= shift
-print("Energy shift:", Enuc)
+print("Nuclear Reulsion Energy:", Enuc)
 
 
 
@@ -65,50 +65,19 @@ print("===============")
 initial_state=HartreeFock(problem.num_spatial_orbitals,problem.num_particles,mapper,)
 
 
-
 optimizer = L_BFGS_B(maxiter=500000)
+estimator = Estimator()
 
 # Print the Hartree Fock energy
-estimator = Estimator()
 hf_energy = estimator.run(initial_state , qubit_jw_op).result().values
 print("Hartree Fock Energy:", hf_energy + Enuc)
 
-
-'''
-paired_list=[((0, 6), (2, 8)), ((0, 6), (3, 9)), ((0, 6), (4, 10)), ((0, 6), (5, 11)), ((1, 7), (2, 8)), ((1, 7), (3, 9)), ((1, 7), (4, 10)), ((1, 7), (5, 11))]
-gen_singles_list=[]
-for i in range(problem.num_spatial_orbitals):
-    for j in range(problem.num_spatial_orbitals):
-        if (i != j and j > i):
-            gen_singles_list.append(((i, ), (j, )))
-            gen_singles_list.append(((i+problem.num_spatial_orbitals, ), (j+problem.num_spatial_orbitals, )))
-
-#print(gen_singles_list)
-
-
-final_exc=paired_list
-for i in range(len(gen_singles_list)):
-    final_exc.append(gen_singles_list[i])
-
-print(final_exc)
-
-
-def custom_ex(num_spatial_orbitals,num_particles):
-    excitations=final_exc
-    return excitations
-
-
-ansatz = UCC(num_spatial_orbitals=problem.num_spatial_orbitals, num_particles=problem.num_particles, excitations=custom_ex, qubit_mapper=mapper, initial_state= initial_state)
-'''
 
 ansatz = UCC(num_spatial_orbitals=problem.num_spatial_orbitals, num_particles=problem.num_particles, excitations='sd', generalized=True, qubit_mapper=mapper, initial_state= initial_state)
 
 
 excitation_list = ansatz._get_excitation_list()
-print('Number of parameters(operators) in the final ansatz:',len(excitation_list))
-#n_params = ansatz.num_parameters
-#print("Number of parameters in the final ansatz:", n_params)
-
+print('Number of operators in the pool:',len(excitation_list))
 
 print("###############################################################################################")
 print("#########################################ADAPT Results#########################################")
@@ -127,9 +96,9 @@ final_list=final_circuit._get_excitation_list()
 
 print("Final parameters", final_parameters)
 print("Final list", final_list)
-print("Distance:", 3.0, ' ', "Adapt energy:", np.real(result.eigenvalue)+Enuc, ' ', "Adapt parameters:", final_circuit.num_parameters)
+print("Adapt energy:", np.real(result.eigenvalue)+Enuc, ' ', "Adapt parameters:", final_circuit.num_parameters)
 print(result.eigenvalue_history)
 print(result.optimal_parameters)
-print("-----------------------------------------------------------------------------------------------------------------------------------")
+
 
 
