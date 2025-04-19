@@ -1,3 +1,7 @@
+# Code for CNOT-Efficient formulation of kUpCCGSD ansatz (lexical ordering) using qubit excitations (instead of standard fermionic  
+# excitations) via particle preserving exchange circuits.
+
+
 # imports
 import qiskit as qt
 import math
