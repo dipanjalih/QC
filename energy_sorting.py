@@ -1,3 +1,6 @@
+# One-parameter optimization based identification of chemically 'relevant' or 'dominant' fermionic operators along with 
+# energy-sorting for determining efficient near-optimal relative ordering of operators.
+
 # imports
 import qiskit as qt
 from qiskit_nature.drivers.second_quantization import PySCFDriver
