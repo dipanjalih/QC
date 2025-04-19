@@ -1,3 +1,7 @@
+# Code for scattering operators (generalized operators with a real excitation on one vertex and a hole-hole 
+# or particle-particle scattering in the other vertex) and identifying the 'dominant' ones using lowest order perturbative estimates.
+
+
 import numpy as np
 from qiskit import Aer
 from qiskit.aqua import QuantumInstance
