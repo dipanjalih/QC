@@ -1,3 +1,5 @@
+# Code to determine the 'important' singles using second order many-body perturbative correction to wavefunction.
+
 import numpy as np
 from qiskit import Aer
 from qiskit.aqua import QuantumInstance
